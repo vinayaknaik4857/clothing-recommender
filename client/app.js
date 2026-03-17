@@ -5,7 +5,7 @@
 
 // ---- CONFIG ----
 // Change this URL to your deployed backend URL when hosting
-const API_BASE = "http://localhost:3000";
+const API_BASE = "https://stylematch-api.onrender.com";
 
 // ---- Get DOM references ----
 const form          = document.getElementById("recommendForm");
