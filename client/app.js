@@ -5,7 +5,7 @@
 
 // ---- CONFIG ----
 // Change this URL to your deployed backend URL when hosting
-const API_BASE = "https://stylematch-api.onrender.com";
+const API_BASE = "https://stylematch-api-s0qv.onrender.com";
 
 // ---- Get DOM references ----
 const form          = document.getElementById("recommendForm");
