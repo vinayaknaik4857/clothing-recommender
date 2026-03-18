@@ -11,7 +11,9 @@ const app = express();
 const PORT = 3000;
 
 // ---- Middleware ----
-app.use(cors()); // Allow frontend to talk to this backend
+app.use(cors({
+  origin: "https://stylematch-abc123.netlify.app"
+})); // Allow frontend to talk to this backend
 app.use(express.json()); // Parse incoming JSON requests
 
 // =============================================
