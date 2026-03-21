@@ -1,172 +1,119 @@
-# 👗 StyleMatch — Smart Clothing Recommender
+StyleMatch 👗✦
+Smart Clothing Recommender for Indian Shoppers
+StyleMatch is a full-stack web app that recommends clothing from Amazon, Flipkart, Myntra, and Meesho based on your age, body type, style preference, and budget. Built with HTML, CSS, JavaScript, and Node.js.
+🔗 Live Site: your-netlify-url.netlify.app
+🖥️ Backend API: stylematch-api-s0qv.onrender.com
+📦 GitHub: github.com/vinayaknaik4857/clothing-recommender
 
-A beginner-friendly full-stack web app that recommends clothing from Amazon, Flipkart, Myntra, and Meesho based on user details.
+✨ Features
 
----
+Enter your age, height, weight, gender, style, and budget
+App calculates your body type using BMI automatically
+Smart scoring engine matches you with the best products
+Results show product name, price, platform badge, and match score
+Filter results by platform — Amazon, Flipkart, Myntra, or Meesho
+Every product links directly to the shopping platform
+Fully mobile responsive
 
-## 📁 Folder Structure
 
-```
+🛠️ Tech Stack
+LayerTechnologyFrontendHTML, CSS, Vanilla JavaScriptBackendNode.js + ExpressProduct DataJSON file (7,500+ products)Frontend HostingNetlify (free)Backend HostingRender (free)
+
+📁 Folder Structure
 clothing-recommender/
 │
-├── client/                   ← Everything the user sees (Frontend)
-│   ├── index.html            ← Main HTML page
-│   ├── style.css             ← All styles and layout
-│   └── app.js                ← JavaScript logic (form, API call, render)
+├── client/                        ← Frontend (what users see)
+│   ├── index.html                 ← Main page with form and results
+│   ├── index-standalone.html      ← Works without backend, open directly
+│   ├── style.css                  ← All styling
+│   └── app.js                     ← Form logic, API calls, rendering
 │
-└── server/                   ← Backend (runs on your computer/server)
-    ├── server.js             ← Express API server
-    ├── package.json          ← Node.js dependencies
+└── server/                        ← Backend (recommendation engine)
+    ├── server.js                  ← Express server and scoring logic
+    ├── package.json               ← Node.js dependencies
     └── data/
-        └── products.json     ← Simulated product catalog
-```
+        └── products.json          ← 7,500+ product catalog
 
----
+⚙️ How Recommendations Work
+Step 1 — Body Type from BMI
+BMI = weight (kg) / height (m)²
 
-## 🏗️ System Architecture
+BMI < 18.5        → slim
+BMI 18.5 – 24.9   → athletic
+BMI 25 – 29.9     → regular
+BMI 30+           → plus
+Step 2 — Age Group
+Under 18   → teen
+18 – 29    → young_adult
+30 – 44    → adult
+45+        → mature
+Step 3 — Product Scoring
+Every product in the catalog gets a score based on how well it matches the user:
++3   gender matches (or product is unisex)
++3   style matches exactly
++2   body type is in product's suitableFor list
++2   age group is in product's ageGroup list
++1   price is mid-range within budget (good value signal)
+Products are sorted by score and the top 12 are returned. Users can filter by platform on the results page without making a new API request.
 
-```
-User fills form
-     ↓
-[Frontend - index.html + app.js]
-     ↓ POST /api/recommend (JSON body)
-[Backend - server.js (Node + Express)]
-     ↓ reads from
-[data/products.json]
-     ↓ applies scoring logic
-     ↓ returns top 12 matches
-[Frontend renders product cards]
-     ↓ user clicks "Shop on Myntra"
-[Opens e-commerce site in new tab]
-```
+🚀 Running Locally
+Option A — No setup (standalone)
+Just open client/index-standalone.html by double-clicking it in File Explorer. Everything runs in the browser with no backend needed.
+Option B — Full stack
 
----
+Install Node.js from nodejs.org — choose LTS version
+Open Command Prompt inside the server folder
+Run these commands:
 
-## ⚙️ How Recommendations Work
-
-1. **BMI Calculation** → `bmi = weight / (height/100)²`
-   - BMI < 18.5 → "slim"
-   - BMI 18.5–24.9 → "athletic"
-   - BMI 25–29.9 → "regular"
-   - BMI 30+ → "plus"
-
-2. **Age Group Mapping**
-   - Under 18 → "teen"
-   - 18–29 → "young_adult"
-   - 30–44 → "adult"
-   - 45+ → "mature"
-
-3. **Scoring System** (each product gets a score 0–11):
-   - +3 if gender matches
-   - +3 if style matches
-   - +2 if body type is in suitableFor list
-   - +2 if age group is in ageGroup list
-   - +1 if price is mid-range (good value)
-
-4. **Hard Filters** applied first:
-   - Price must be within selected budget
-   - Platform must match (if filtered)
-
-5. Top 12 results by score are returned.
-
----
-
-## 🚀 Setup & Running Locally
-
-### Step 1: Install Node.js
-Download from https://nodejs.org (choose LTS version)
-
-### Step 2: Install backend dependencies
-```bash
-cd server
-npm install
-```
-
-### Step 3: Start the backend
-```bash
+bashnpm install
 node server.js
-# You'll see: ✅ Server running at http://localhost:3000
-```
 
-### Step 4: Open the frontend
-Just double-click `client/index.html` in your file manager,
-OR open it in VS Code and use Live Server extension.
+Open client/index.html in your browser
 
----
+The backend runs at http://localhost:3000. Keep the terminal open while using the site.
 
-## 🌐 Free Deployment Options
+🌐 Deployment (Free)
+This project is deployed using two free services:
+Backend → Render
+SettingValueRoot DirectoryserverBuild Commandnpm installStart Commandnode server.jsInstance TypeFree
+Frontend → Netlify
+SettingValueBase DirectoryclientPublish DirectoryclientBuild Command(leave empty)
+After deploying the backend on Render, update this line in client/app.js:
+javascriptconst API_BASE = "https://stylematch-api-s0qv.onrender.com";
+Then push to GitHub — Netlify will auto-redeploy.
 
-### Option A: Deploy frontend on Netlify (free)
-1. Go to https://netlify.com → Sign up free
-2. Drag & drop the `client/` folder onto the Netlify dashboard
-3. Your frontend is live! (e.g. `https://stylematch.netlify.app`)
+⚠️ Note: Render's free tier sleeps after 15 minutes of inactivity. The first request after sleep takes around 30 seconds to wake up. This is normal behaviour on the free plan.
 
-### Option B: Deploy backend on Render (free)
-1. Go to https://render.com → Sign up
-2. New Web Service → connect your GitHub repo
-3. Set Root Directory to `server`
-4. Build Command: `npm install`
-5. Start Command: `node server.js`
-6. Get your URL (e.g. `https://stylematch-api.onrender.com`)
-7. Update `API_BASE` in `client/app.js` to this URL
 
-### Option C: Both on Railway (simplest)
-1. Go to https://railway.app
-2. Deploy both frontend + backend together
-3. Railway auto-detects Node.js
-
-### Full Stack on Vercel (advanced)
-- Use `vercel.json` to configure routes
-- Frontend as static files, backend as serverless function
-
----
-
-## 🔌 How Frontend Connects to Backend
-
-In `app.js`:
-```javascript
-const API_BASE = "http://localhost:3000"; // Change to your deployed URL
-
-const response = await fetch(`${API_BASE}/api/recommend`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ age, height, weight, gender, style, budget })
-});
-const data = await response.json();
-```
-
----
-
-## 🛒 Adding More Products
-
-Open `server/data/products.json` and add a new object:
-```json
-{
-  "id": 25,
-  "name": "Your Product Name",
-  "price": 1500,
-  "platform": "amazon",          ← amazon | flipkart | myntra | meesho
-  "image": "https://...",         ← product image URL
-  "url": "https://amazon.in/s?k=your+product",
-  "style": "casual",             ← casual | formal | streetwear | partywear | sportswear | traditional
-  "gender": "male",              ← male | female | unisex
-  "suitableFor": ["slim", "athletic"],
+🛒 Product Catalog
+The catalog has 7,500+ products covering:
+CategoryDetailsStylesCasual, Formal, Streetwear, Partywear, Sportswear, TraditionalGendersMale, Female, UnisexBody TypesSlim, Athletic, Regular, PlusAge GroupsTeen, Young Adult, Adult, MaturePlatformsAmazon, Flipkart, Myntra, MeeshoPrice Range₹499 – ₹7,999
+To add your own products, open server/data/products.json and add a new entry:
+json{
+  "id": 7537,
+  "name": "Black Cotton Casual T-Shirt",
+  "price": 799,
+  "platform": "amazon",
+  "image": "https://your-image-url.com/photo.jpg",
+  "url": "https://www.amazon.in/s?k=black+cotton+casual+tshirt",
+  "style": "casual",
+  "gender": "male",
+  "suitableFor": ["slim", "athletic", "regular"],
   "ageGroup": ["young_adult", "adult"],
   "category": "T-Shirt"
 }
-```
 
----
+🔮 Future Plans
 
-## 🔮 Future Improvements
+ AI-powered recommendations using Claude API
+ Real product listings via Amazon / Flipkart affiliate APIs
+ User accounts to save preferences and wishlist
+ Filter by color, size, and season
+ Product ratings and reviews
+ Dark mode
 
-- [ ] Connect to real Flipkart Affiliate API or Amazon Product API
-- [ ] Add user login to save preferences
-- [ ] Add more filter options (color, season, size)
-- [ ] Add a wishlist feature
-- [ ] Add product ratings
 
----
+📄 License
+MIT — free to use, modify, and distribute.
 
-## 📄 License
-MIT — free to use and modify.
+Built with ♥ by vinayaknaik4857
